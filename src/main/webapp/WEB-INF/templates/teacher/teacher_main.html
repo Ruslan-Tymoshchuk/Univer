@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Teachers</title>
+  <th:block th:insert="fragments/common.html :: styles"></th:block>
+</head>
+
+<body class="background">
+
+  <th:block th:insert="fragments/common.html :: nav_panel"></th:block>
+  <div class="container general-data">
+    <div class="card">
+      <table class="table table-success table-striped table-hover">
+        <thead>
+          <tr>
+            <th class="text-center" scope="col" style="width: 10%;">ID</th>
+            <th class="text-center" scope="col" style="width: 50%;">TEACHER</th>
+            <th class="text-center" scope="col" style="width: 10%;">AGE</th>
+            <th class="text-center" scope="col" style="width: 30%;">BIRTH
+              DATE</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="teacher : ${listTeachers}">
+            <td class="text-center" th:text="${teacher.id}">
+            <td class="text-center"><a th:href="@{/teachers/{id}(id=${teacher.id})}"><strong
+                  th:text="${teacher.firstName} + ' ' + ${teacher.lastName}"></strong></a></td>
+            <td class="text-center" th:text="${teacher.getAge()}"></td>
+            <td class="text-center" th:text="${#temporals.format(teacher.birthDate, 'dd-MM-yyyy')}"></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Pagination -->
+      <div class="row">
+        <div class="col">
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+              <li class="page-item"><strong class="page-link" th:text="'Total pages: ' + ${totalPages}"></strong>
+              <li class="page-item"><a class="page-link" th:if="${currentPage > 1}"
+                  th:href="@{/teachers/(pageNumber=1, pageSize=5)}">First</a></li>
+              <li class="page-item" th:unless="${currentPage > 1}"><a class="page-link">First</a></li>
+              <li class="page-item"><a class="page-link" th:if="${currentPage > 1}"
+                  th:href="@{/teachers/(pageNumber=${currentPage - 1}, pageSize=5)}">Previous</a></li>
+              <li class="page-item" th:unless="${currentPage > 1}"><a class="page-link">Previous</a></li>
+              <li class="page-item"><strong class="page-link" th:text="${currentPage}"></strong>
+              <li class="page-item"><a class="page-link" th:if="${currentPage < totalPages}"
+                  th:href="@{/teachers/(pageNumber=${currentPage + 1}, pageSize=5)}">Next</a></li>
+              <li class="page-item" th:unless="${currentPage < totalPages}"><a class="page-link">Next</a></li>
+              <li class="page-item"><a class="page-link" th:if="${currentPage < totalPages}"
+                  th:href="@{/teachers/(pageNumber=${totalPages}, pageSize=5)}">Last</a></li>
+              <li class="page-item" th:unless="${currentPage < totalPages}"><a class="page-link">Last</a></li>
+            </ul>
+          </nav>
+        </div>
+
+        <!-- Modal create teacher button-->
+        <div class="col">
+          <button type="button" class="btn btn-warning" style="width: 150px;" data-bs-toggle="modal"
+            data-bs-target="#create-teacher">
+            New Teacher</button>
+        </div>
+      </div>
+
+      <!-- Modal create student-->
+      <div class="modal fade" id="create-teacher" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">New teacher</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form th:method="post" th:action="@{/teachers/save}" th:object="${teacherDto}"
+                class="row gy-2 gx-3 align-items-center">
+                <th:block th:insert="fragments/common :: personal-information"></th:block>
+                <div class="row my-2">
+                  <th:block th:insert="fragments/common :: gender"></th:block>
+                </div>
+                <th:block th:insert="fragments/common :: address"></th:block>
+                <div class="row my-2">
+                  <th:block th:insert="fragments/common :: courses"></th:block>
+                  <th:block th:insert="fragments/common :: academic-degree"></th:block>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

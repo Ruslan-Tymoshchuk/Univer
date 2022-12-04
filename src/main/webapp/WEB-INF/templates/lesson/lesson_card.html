@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Lesson</title>
+  <th:block th:insert="fragments/common.html :: styles"></th:block>
+</head>
+
+<body class="background">
+
+  <div th:insert="fragments/common.html :: nav_panel"></div>
+  <div class="container granular-data">
+    <div class="row justify-content-center">
+      <div class="card text-center">
+        <div class="card-header">Lesson card</div>
+        <div class="card-body">
+          <form th:method="patch" class="row g-3" th:action="@{/lessons/update}" th:object="${lessonDto}">
+            <input type="hidden" th:field="*{id}" name="lesson-id" />
+            <div class="col-md-3">
+              <label class="form-label">Teacher</label> <select class="form-select" th:field=*{teacher.id} required>
+                <option th:each="teacher : ${allTeachers}" th:value="${teacher.id}"
+                  th:text="${teacher.firstName} + ' ' + ${teacher.lastName}"></option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Course</label> <select class="form-select" th:field=*{course.id} required>
+                <option th:each="course : ${allCourses}" th:value="${course.id}" th:text="${course.name}"></option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Audience</label> <select class="form-select" th:field=*{audience.id} required>
+                <option th:each="audience : ${allAudiences}" th:value="${audience.id}" th:text="${audience.number}">
+                </option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Date</label> <input type="date" class="form-control" th:field="*{date}"
+                id="lesson-date" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Groups (multiple with Ctrl)</label> <select class="form-control" name="groups"
+                size="3" multiple required>
+                <option th:each="group : ${allGroups}" th:value="${group.id}" th:text="${group.name}"
+                  th:selected="${lessonDto.groups.contains(group)}"></option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Time</label> <select class="form-select" th:field=*{time.id} required>
+                <option th:each="lessonTime : ${allLessonTimes}" th:value="${lessonTime.id}"
+                  th:text="${#temporals.format(lessonTime.startTime, 'HH:mm')} + ' ' + ${#temporals.format(lessonTime.endTime, 'HH:mm')}">
+                </option>
+              </select>
+            </div>
+            <div class="row g-1 my-2 mb-2">
+              <div class="d-grid gap-2 col-3 my-2 mx-auto">
+                <button type="submit" class="btn btn-warning"
+                  onclick="return confirm('Are you sure you want to update this lesson?');">Update</button>
+              </div>
+            </div>
+          </form>
+          <div class="row my-2">
+            <form th:method="delete" th:action="@{/lessons/delete/{id}(id=${lessonDto.id})}">
+              <div class="d-grid gap-2 col-3 mx-auto">
+                <button type="submit" class="btn btn-primary"
+                  onclick="return confirm('Are you sure you want to delete this lesson?');">Delete</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

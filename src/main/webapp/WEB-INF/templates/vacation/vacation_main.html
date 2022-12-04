@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Vacations</title>
+  <th:block th:insert="fragments/common.html :: styles"></th:block>
+</head>
+
+<body class="background">
+
+  <th:block th:insert="fragments/common.html :: nav_panel"></th:block>
+  <div class="container general-data">
+    <div class="card">
+      <table class="table table-success table-striped table-hover">
+        <thead>
+          <tr>
+            <th class="text-center" scope="col" style="width: 10%;">ID</th>
+            <th class="text-center" scope="col" style="width: 50%;">START
+              DATE</th>
+            <th class="text-center" scope="col" style="width: 10%;">END
+              DATE</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="vacation : ${vacations}">
+            <td class="text-center"><a th:href="@{/vacations/{id}(id=${vacation.id})}"><strong
+                  th:text="${vacation.id}"></strong></a>
+            <td class="text-center" th:text="${#temporals.format(vacation.startDate, 'dd-MM-yyyy')}"></td>
+            <td class="text-center" th:text="${#temporals.format(vacation.endDate, 'dd-MM-yyyy')}"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</body>
+
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Audiences</title>
+  <th:block th:insert="fragments/common.html :: styles"></th:block>
+</head>
+
+<body class="background">
+
+  <th:block th:insert="fragments/common.html :: nav_panel"></th:block>
+  <div class="container general-data">
+    <div class="card">
+      <table class="table table-success table-striped table-hover">
+        <thead>
+          <tr>
+            <th class="text-center" style="width: 10%;" scope="col">ID</th>
+            <th class="text-center" style="width: 45%;" scope="col">NUMBER</th>
+            <th class="text-center" style="width: 45%;" scope="col">CAPACITY</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="audience : ${listAudiences}">
+            <td class="text-center" th:text="${audience.id}"></td>
+            <td class="text-center"><a th:href="@{/audiences/{id}(id=${audience.getId()})}"><strong
+                  th:text="${audience.number}"></strong></a></td>
+            <td class="text-center" th:text="${audience.capacity}"></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Pagination -->
+      <div class="row">
+        <div class="col">
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+              <li class="page-item"><strong class="page-link" th:text="'Total pages: ' + ${totalPages}"></strong>
+              <li class="page-item"><a class="page-link" th:if="${currentPage > 1}"
+                  th:href="@{/audiences/(pageNumber=1, pageSize=5)}">First</a></li>
+              <li class="page-item" th:unless="${currentPage > 1}"><a class="page-link">First</a></li>
+              <li class="page-item"><a class="page-link" th:if="${currentPage > 1}"
+                  th:href="@{/audiences/(pageNumber=${currentPage - 1}, pageSize=5)}">Previous</a></li>
+              <li class="page-item" th:unless="${currentPage > 1}"><a class="page-link">Previous</a></li>
+              <li class="page-item"><strong class="page-link" th:text="${currentPage}"></strong>
+              <li class="page-item"><a class="page-link" th:if="${currentPage < totalPages}"
+                  th:href="@{/audiences/(pageNumber=${currentPage + 1}, pageSize=5)}">Next</a></li>
+              <li class="page-item" th:unless="${currentPage < totalPages}"><a class="page-link">Next</a></li>
+              <li class="page-item"><a class="page-link" th:if="${currentPage < totalPages}"
+                  th:href="@{/audiences/(pageNumber=${totalPages}, pageSize=5)}">Last</a></li>
+              <li class="page-item" th:unless="${currentPage < totalPages}"><a class="page-link">Last</a></li>
+            </ul>
+          </nav>
+        </div>
+
+        <!-- Modal create audience button-->
+        <div class="col">
+          <button type="button" class="btn btn-warning" style="width: 150px;" data-bs-toggle="modal"
+            data-bs-target="#create-audience">
+            New Audience</button>
+        </div>
+      </div>
+
+      <!-- Modal create audience-->
+      <div class="modal fade" id="create-audience" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">New
+                audience</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form th:method="post" th:action="@{/audiences/save}" th:object="${audienceDto}"
+                class="row gy-3 gx-3 justify-content-center">
+                <div class="col-auto form-floating">
+                  <input type="text" th:field="*{number}" class="form-control" id="floatingInput" placeholder="Number"
+                    required> <label for="floatingInput">Number:</label>
+                </div>
+                <div class="col-auto form-floating">
+                  <input type="text" th:field="*{capacity}" class="form-control" id="floatingInput"
+                    placeholder="Capacity" required> <label for="floatingInput">Capacity:</label>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

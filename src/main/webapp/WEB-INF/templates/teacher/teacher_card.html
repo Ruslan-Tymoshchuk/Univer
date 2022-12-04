@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Teacher</title>
+  <th:block th:insert="fragments/common.html :: styles"></th:block>
+</head>
+
+<body class="background">
+
+  <th:block th:insert="fragments/common.html :: nav_panel"></th:block>
+  <div class="container" style="margin-top: 45px; width: 900px;">
+    <div class="row justify-content-center">
+      <div class="card text-center">
+        <div class="card-header">Teacher card</div>
+        <div class="card-body">
+          <form th:method="patch" class="row g-3" th:action="@{/teachers/update}" th:object="${teacherDto}">
+            <input type="hidden" th:field="*{id}" name="teacher-id" /> <input type="hidden" th:field="*{address.id}"
+              name="address-id" /> <input type="hidden" th:field="*{gender}" name="gender" />
+            <th:block th:insert="fragments/common :: personal-information"></th:block>
+            <div class="row g-1 my-1 mb-3">
+              <th:block th:insert="fragments/common :: courses"></th:block>
+              <th:block th:insert="fragments/common :: academic-degree"></th:block>
+              <div class="col-3 my-auto mx-auto">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                  data-bs-target=#lessons-by-date>Lessons
+                  by date</button>
+              </div>
+              <div class="col-3 my-auto mx-auto">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target=#new-vacation>Create
+                  vacation day</button>
+              </div>
+              <div class="col-3 my-auto mx-auto">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                  data-bs-target=#vacations-by-date>Vacations
+                  by date</button>
+              </div>
+            </div>
+            <th:block th:insert="fragments/common :: address"></th:block>
+            <div class="d-grid p-0 gap-2 col-3 my-3 mx-auto">
+              <button type="submit" class="btn btn-warning"
+                onclick="return confirm('Are you sure you want to update this teacher?');">Update</button>
+            </div>
+          </form>
+          <div class="row my-1">
+            <form th:method="delete" th:action="@{/teachers/delete/{id}(id=${teacherDto.id})}">
+              <div class="d-grid gap-2 col-3 mx-auto">
+                <button type="submit" class="btn btn-primary"
+                  onclick="return confirm('Are you sure you want to delete this teacher?');">Delete</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal lessons by date interval-->
+  <div class="modal fade" id="lessons-by-date" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Lessons by
+            teacher</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form th:method="get" th:action="@{/lessons/by-teacher-id-and-date-interval}"
+            class="row gy-2 gx-3 align-items-center">
+            <input type="hidden" class="form-control" id="id" name="id" th:value="${teacherDto.id}">
+            <div class="col form-floating">
+              <input type="date" class="form-control" id="start" name="start" placeholder="Start date" required> <label
+                for="start">Start
+                date:</label>
+            </div>
+            <div class="col form-floating">
+              <input type="date" class="form-control" id="end" name="end" placeholder="End date" required> <label
+                for="end">End
+                date:</label>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Find</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal new vacation-->
+  <div class="modal fade" id="new-vacation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">New Vacation</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form th:method="post" th:action="@{/vacations/save}" class="row gy-2 gx-3 align-items-center"
+            th:object="${vacationDto}">
+            <div class="col form-floating">
+              <input type="date" class="form-control" id="start" name="start" th:field="*{startDate}"
+                placeholder="Start date" required>
+              <label for="start">Start date:</label>
+            </div>
+            <div class="col form-floating">
+              <input type="date" class="form-control" id="end" name="end" th:field="*{endDate}" placeholder="End date"
+                required> <label for="end">End date:</label>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal vacations by date interval-->
+  <div class="modal fade" id="vacations-by-date" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Vacations by
+            teacher</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form th:method="get" th:action="@{/vacations/by-teacher-and-date-interval}"
+            class="row gy-2 gx-3 align-items-center">
+            <input type="hidden" class="form-control" id="id" name="id" th:value="${teacherDto.id}">
+            <div class="col form-floating">
+              <input type="date" class="form-control" id="start" name="start" placeholder="Start date" required> <label
+                for="start">Start
+                date:</label>
+            </div>
+            <div class="col form-floating">
+              <input type="date" class="form-control" id="end" name="end" placeholder="End date" required> <label
+                for="end">End
+                date:</label>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Find</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

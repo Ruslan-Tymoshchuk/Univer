@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Lessons</title>
+  <th:block th:insert="fragments/common.html :: styles"></th:block>
+</head>
+
+<body class="background">
+
+  <th:block th:insert="fragments/common.html :: nav_panel"></th:block>
+  <div class="container general-data">
+    <div class="card">
+      <table class="table table-success table-striped table-hover">
+        <thead>
+          <tr>
+            <th class="text-center" scope="col">LESSON</th>
+            <th class="text-center" scope="col">TEACHER</th>
+            <th class="text-center" scope="col">COURSE</th>
+            <th class="text-center" scope="col">AUDIENCE</th>
+            <th class="text-center" scope="col">DATE</th>
+            <th class="text-center" scope="col">TIME</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="lesson, iterator : ${allLessons}">
+            <td class="text-center"><a th:href="@{/lessons/{id}(id=${lesson.id})}"><strong
+                  th:text="${iterator.index + 1}"></strong></a></td>
+            <td class="text-center" th:text="${lesson.teacher.firstName} + ' ' + ${lesson.teacher.lastName}">Teacher
+            </td>
+            <td class="text-center" th:text="${lesson.course.name}">Course</td>
+            <td class="text-center" th:text="${lesson.audience.number}">Audience</td>
+            <td class="text-center" th:text="${#temporals.format(lesson.date, 'dd-MM-yyyy')}">Date</td>
+            <td class="text-center" th:text="${#temporals.format(lesson.time.startTime, 'HH:mm')} + ' ' 
+                                             + ${#temporals.format(lesson.time.endTime, 'HH:mm')}">Time</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Modal create lesson button-->
+      <div class="row justify-content-center" style="margin-bottom: 2%">
+        <button type="button" class="btn btn-warning" style="width: 150px;" data-bs-toggle="modal"
+          data-bs-target="#create-lesson">
+          New Lesson</button>
+
+        <!-- Modal lesson-times button-->
+        <button type="button" class="btn btn-warning" style="width: 150px; margin-left: 10px;" data-bs-toggle="modal"
+          data-bs-target="#lesson-times">All lesson times</button>
+      </div>
+    </div>
+
+    <!-- Modal create lesson-->
+    <div class="modal fade" id="create-lesson" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+      aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">New Lesson</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form th:method="post" class="row g-3" th:action="@{/lessons/save}" th:object="${lessonDto}">
+              <div class="row justify-content-center my-3">
+                <div class="col-md-6">
+                  <select class="form-select" th:field=*{teacher.id} required>
+                    <option selected value=''>Teacher</option>
+                    <option th:each="teacher : ${allTeachers}" th:value="${teacher.id}"
+                      th:text="${teacher.firstName} + ' ' + ${teacher.lastName}"></option>
+                  </select>
+                </div>
+                <div class="col-md-5">
+                  <select class="form-select" th:field=*{course.id} required>
+                    <option selected value=''>Course</option>
+                    <option th:each="course : ${allCourses}" th:value="${course.id}" th:text="${course.name}"></option>
+                  </select>
+                </div>
+              </div>
+              <div class="row justify-content-center my-2">
+                <div class="col-md-4">
+                  <input type="date" class="form-control" th:field="*{date}" id="lesson-date" required>
+                </div>
+                <div class="col-md-5">
+                  <select class="form-select" th:field=*{time.id} required>
+                    <option selected value=''>Time</option>
+                    <option th:each="lessonTime : ${allLessonTimes}" th:value="${lessonTime.id}"
+                      th:text="${#temporals.format(lessonTime.startTime, 'HH:mm')} + ' ' + ${#temporals.format(lessonTime.endTime, 'HH:mm')}">
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="row justify-content-center my-2">
+                <div class="col-md-7">
+                  <label class="form-label">Groups (multiple select with
+                    Ctrl)</label> <select class="form-control" name="groups" size="3" multiple required>
+                    <option th:each="group : ${allGroups}" th:value="${group.id}" th:text="${group.name}"></option>
+                  </select>
+                </div>
+                <div class="col-md-4 my-5">
+                  <select class="form-select" th:field=*{audience.id} required>
+                    <option selected value=''>Audience</option>
+                    <option th:each="audience : ${allAudiences}" th:value="${audience.id}" th:text="${audience.number}">
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal create lesson-times-->
+    <div class="modal fade" id="lesson-times" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">All lesson
+              times</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <table class="table table-success table-striped table-hover">
+              <thead>
+                <tr>
+                  <th class="text-center" scope="col">TIME</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="lessonTime : ${allLessonTimes}">
+                  <td class="text-center"><a th:href="@{/lesson-times/{id}(id=${lessonTime.id})}"><strong
+                        th:text="${#temporals.format(lessonTime.startTime, 'HH:mm')} + ' ' + ${#temporals.format(lessonTime.endTime, 'HH:mm')}"></strong></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+          <div class="modal-footer">
+
+            <!-- Modal new-lesson-times button-->
+            <button type="button" class="btn btn-warning" style="width: 150px;" data-bs-toggle="modal"
+              data-bs-target="#new-lesson-time">New lesson time</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal lesson time-->
+    <div class="modal fade" id="new-lesson-time" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+      aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">New lesson
+              time</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form th:method="post" th:action="@{/lesson-times/save}" th:object="${lessonTimeDto}"
+              class="row gy-2 gx-3 align-items-center">
+              <div class="col-auto form-floating">
+                <input type="time" th:field="*{startTime}" class="form-control" id="starttime" name="starttime"
+                  placeholder="Start Time" required> <label for="startTime">Start Time:</label>
+              </div>
+              <div class="col-auto form-floating">
+                <input type="time" th:field="*{endTime}" class="form-control" id="endtime" name="endtime"
+                  placeholder="End Time" required>
+                <label for="endtime">End Time:</label>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

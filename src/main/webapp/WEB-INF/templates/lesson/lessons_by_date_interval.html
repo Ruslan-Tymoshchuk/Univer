@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Lessons by Student</title>
+  <th:block th:insert="fragments/common.html :: styles"></th:block>
+</head>
+
+<body class="background">
+
+  <th:block th:insert="fragments/common.html :: nav_panel"></th:block>
+  <div class="container general-data">
+    <div class="card">
+      <table class="table table-success table-striped table-hover">
+        <thead>
+          <tr>
+            <th class="text-center" scope="col">LESSON</th>
+            <th class="text-center" scope="col">TEACHER</th>
+            <th class="text-center" scope="col">COURSE</th>
+            <th class="text-center" scope="col">AUDIENCE</th>
+            <th class="text-center" scope="col">DATE</th>
+            <th class="text-center" scope="col">TIME</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="lesson, iterator : ${lessons}">
+            <td class="text-center"><a th:href="@{/lessons/{id}(id=${lesson.id})}"><strong
+                  th:text="${iterator.index + 1}"></strong></a></td>
+            <td class="text-center" th:text="${lesson.teacher.firstName} + ' ' + ${lesson.teacher.lastName}">Teacher
+            </td>
+            <td class="text-center" th:text="${lesson.course.name}">Course</td>
+            <td class="text-center" th:text="${lesson.audience.number}">Audience</td>
+            <td class="text-center" th:text="${#temporals.format(lesson.date, 'dd-MM-yyyy')}">Date</td>
+            <td class="text-center" th:text="${#temporals.format(lesson.time.startTime, 'HH:mm')} + ' ' 
+                                             + ${#temporals.format(lesson.time.endTime, 'HH:mm')}">Time</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</body>
+
+</html>

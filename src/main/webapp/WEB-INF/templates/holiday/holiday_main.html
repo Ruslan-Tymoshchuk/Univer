@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Holidays</title>
+  <th:block th:insert="fragments/common.html :: styles"></th:block>
+  <link rel="stylesheet" href="../webjars/fullcalendar/5.11.3/main.css" />
+  <script type="text/javascript" src="../webjars/fullcalendar/5.11.3/main.js"></script>
+  <script type="text/javascript" src="../js/holidays.js"></script>
+</head>
+
+<body class="background">
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand p-0" href="/"><img th:src="@{/images/univer.png}" alt="University" width="150" /></a>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+            <a th:href="@{/audiences/}" class="btn btn-outline-success">Audiences</a>
+            <a th:href="@{/courses/}" class="btn btn-outline-success">Courses</a>
+            <a th:href="@{/groups/}" class="btn btn-outline-success">Groups</a>
+            <a th:href="@{/holidays/}" class="btn btn-outline-success">Holidays</a>
+            <a th:href="@{/lessons/}" class="btn btn-outline-success">Schedule</a>
+            <a th:href="@{/students/}" class="btn btn-outline-success">Students</a>
+            <a th:href="@{/teachers/}" class="btn btn-outline-success">Teachers</a>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create-holiday">
+              Add holiday</button>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#holiday-name">
+              Holiday card</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="container p-0" style="margin-top: 35px; width: 1100px;">
+    <div class="card" id='calendar'></div>
+  </div>
+
+  <!-- Modal create holiday-->
+  <div class="modal fade" id="create-holiday" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">New holiday</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form th:method="post" th:action="@{/holidays/save}" th:object="${holidayDto}"
+            class="row gy-2 gx-3 align-items-center">
+            <div class="col form-floating">
+              <input type="text" th:field="*{name}" class="form-control" id="floatingInput" placeholder="Name" required>
+              <label for="floatingInput">Name:</label>
+            </div>
+            <div class="col form-floating">
+              <input type="date" th:field="*{startDate}" class="form-control" id="floatingInput"
+                placeholder="Start Date" required> <label for="floatingInput">Start Date:</label>
+            </div>
+            <div class="col form-floating">
+              <input type="date" th:field="*{endDate}" class="form-control" id="floatingInput" placeholder="End Date"
+                required> <label for="floatingInput">End Date:</label>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal find by holiday name-->
+  <div class="modal fade" id="holiday-name" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Find holiday
+            by name</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form th:method="get" th:action="@{/holidays/name}" class="row gy-2 gx-3 align-items-center">
+            <div class="col form-floating">
+              <input type="text" class="form-control" id="holidayname" name="holidayname" placeholder="Name" required>
+              <label for="holidayname">Name:</label>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Find</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

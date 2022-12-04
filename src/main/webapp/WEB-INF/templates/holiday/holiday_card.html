@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Holiday</title>
+  <th:block th:insert="fragments/common.html :: styles"></th:block>
+</head>
+
+<body class="background">
+  <div th:insert="fragments/common.html :: nav_panel"></div>
+  <div class="container granular-data">
+    <div class="row justify-content-center">
+      <div class="card text-center">
+        <div class="card-header">Holiday card</div>
+        <div class="card-body">
+          <form th:method="patch" th:action="@{/holidays/update/}" th:object="${holidayDto}">
+            <input type="hidden" th:field="*{id}" name="id" /> <label for="name">Name</label> <input type="text"
+              class="form-control" th:field="*{name}" id="holidayname" /> <label for="startdate">Start
+              date</label> <input type="date" class="form-control" th:field="*{startDate}" id="startdate" /> <label
+              for="enddate">End
+              date</label> <input type="date" class="form-control" th:field="*{endDate}" id="enddate" />
+            <div class="d-grid gap-2 col-3 my-4 mx-auto">
+              <button type="submit" class="btn btn-warning"
+                onclick="return confirm('Are you sure you want to update this holiday?');">Update</button>
+            </div>
+          </form>
+          <div class="row my-2">
+            <form th:method="delete" th:action="@{/holidays/delete/{id}(id=${holidayDto.id})}">
+              <div class="d-grid gap-2 col-3 mx-auto">
+                <button type="submit" class="btn btn-primary"
+                  onclick="return confirm('Are you sure you want to delete this holiday?');">Delete</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

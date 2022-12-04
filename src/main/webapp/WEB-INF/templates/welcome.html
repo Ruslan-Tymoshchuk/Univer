@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Univer</title>
+  <th:block th:insert="fragments/common.html :: styles"></th:block>
+</head>
+
+<body class="background">
+  <th:block th:insert="fragments/common.html :: nav_panel"></th:block>
+  <div class="container my-2">
+    <div class="row justify-content-center">
+      <th:block th:insert="fragments/common :: pictures-carusel"></th:block>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Audience</title>
+  <th:block th:insert="fragments/common.html :: styles"></th:block>
+</head>
+
+<body class="background">
+  <div th:insert="fragments/common.html :: nav_panel"></div>
+  <div class="container granular-data">
+    <div class="row justify-content-center">
+      <div class="card text-center">
+        <div class="card-header">Audience card</div>
+        <div class="card-body">
+          <form th:method="patch" th:action="@{/audiences/update/}" th:object="${audienceDto}">
+            <input type="hidden" th:field="*{id}" name="id" /> <label for="name">Number</label> <input type="text"
+              class="form-control" th:field="*{number}" id="number" /> <label for="capacity">Capacity</label>
+            <input type="text" class="form-control" th:field="*{capacity}" id="capacity" />
+            <div class="d-grid gap-2 col-3 my-4 mx-auto">
+              <button type="submit" class="btn btn-warning"
+                onclick="return confirm('Are you sure you want to update this audience?');">Update</button>
+            </div>
+          </form>
+          <div class="row my-2">
+            <form th:method="delete" th:action="@{/audiences/delete/{id}(id=${audienceDto.id})}">
+              <div class="d-grid gap-2 col-3 mx-auto">
+                <button type="submit" class="btn btn-primary"
+                  onclick="return confirm('Are you sure you want to delete this group?');">Delete</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
