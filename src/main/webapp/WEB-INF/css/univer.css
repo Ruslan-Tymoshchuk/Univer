@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+.background {
+	width: 100%;
+	background-image: url('../images/pexels.jpg');
+}
+
+.general-data {
+	margin-top: 5%;
+	width: 70%;
+}
+
+.granular-data {
+	margin-top: 8%;
+	width: 50%;
+}
