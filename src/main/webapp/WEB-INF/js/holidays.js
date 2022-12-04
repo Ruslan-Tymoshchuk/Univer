@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         eventSources: [
             {
-                url: '/univer/api/v1/holidays/',
+                url: '/api/v1/holidays/',
                 color: 'yellow',
                 textColor: 'black'
             }
